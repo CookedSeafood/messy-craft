@@ -7,7 +7,7 @@ Messy Craft is a nbt crafting library runs on server-side.
 - `/craft <recipe> [<times>]` Craft recipes.
 - `/c <recipe> [<times>]` Alias of `/craft`.
 
-## Recipes
+## Recipe
 
 Recipes can be configured by data packs in `data/MY_NAMESPACE/messy_recipe/.../MY_RECIPE.json`. (where `MY_NAMESPACE` and `MY_RECIPE` should be replaced, obviously)
 
