@@ -4,8 +4,8 @@ Messy Craft is a nbt crafting library runs on server-side.
 
 ## Commands
 
-`/craft <recipe> [<times>]` Craft recipes.
-`/c <recipe> [<times>]` Alias of `/craft`.
+- `/craft <recipe> [<times>]` Craft recipes.
+- `/c <recipe> [<times>]` Alias of `/craft`.
 
 ## Recipes
 
