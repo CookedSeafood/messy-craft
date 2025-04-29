@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 
@@ -119,5 +120,9 @@ public class MessyItemStack {
 
     public static MessyItemStack fromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup wrapperLookup) {
         return new MessyItemStack(ItemStack.fromNbt(wrapperLookup, nbtCompound).get());
+    }
+
+    public NbtElement toNbt(RegistryWrapper.WrapperLookup wrapperLookup) {
+        return this.itemStack.toNbt(wrapperLookup);
     }
 }

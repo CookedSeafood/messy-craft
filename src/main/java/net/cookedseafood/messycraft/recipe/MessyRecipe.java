@@ -1,5 +1,8 @@
 package net.cookedseafood.messycraft.recipe;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryWrapper;
@@ -41,6 +44,19 @@ public class MessyRecipe {
         return new MessyRecipe(
             MessyIngredient.fromNbt(nbtCompound.getList("ingredients", NbtElement.COMPOUND_TYPE), wrapperLookup),
             MessyItemStack.fromNbt(nbtCompound.getCompound("result"), wrapperLookup)
+        );
+    }
+
+    public NbtCompound toNbt(RegistryWrapper.WrapperLookup wrapperLookup) {
+        return new NbtCompound(
+            new HashMap<>(
+                Map.<String,NbtElement>of(
+                    "ingredients",
+                    this.ingredients.toNbt(wrapperLookup),
+                    "result",
+                    this.result.toNbt(wrapperLookup)
+                )
+            )
         );
     }
 }

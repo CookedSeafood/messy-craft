@@ -41,7 +41,7 @@ public class MessyCraft implements ModInitializer {
 
     public static final byte VERSION_MAJOR = 0;
     public static final byte VERSION_MINOR = 1;
-    public static final byte VERSION_PATCH = 14;
+    public static final byte VERSION_PATCH = 15;
 
     public static final String MOD_NAMESPACE = "messy_craft";
     public static final Identifier RECIPE_LOADER_ID = Identifier.of(MOD_NAMESPACE, "recipe_loader");
@@ -54,7 +54,7 @@ public class MessyCraft implements ModInitializer {
         // However, some things (like resources) may still be uninitialized.
         // Proceed with mild caution.
 
-        LOGGER.info("[Messy-Craft] Let me craft you a crash!");
+        LOGGER.info("[Messy-Craft] Loaded!");
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(RECIPE_LOADER_ID, wrapperLookup -> {
             return new SimpleSynchronousResourceReloadListener() {
@@ -110,11 +110,13 @@ public class MessyCraft implements ModInitializer {
     }
 
     /**
-     * Craft the recipe of the id at the times.
+     * Craft the recipe of the id at the times, if there is enough ingredients.
      * 
+     * <p>This modifies player's inventory if successfully crafted.</p>
+     * 
+     * @param player
      * @param recipeId
      * @param times
-     * @param player
      * @return true if successfully crafted.
      */
     public static boolean craft(ServerPlayerEntity player, Identifier recipeId, int times) {
@@ -127,7 +129,9 @@ public class MessyCraft implements ModInitializer {
     }
 
     /**
-     * Craft the recipe at the times.
+     * Craft the recipe at the times, if there is enough ingredients.
+     * 
+     * <p>This modifies player's inventory if successfully crafted.</p>
      * 
      * @param player
      * @param recipe

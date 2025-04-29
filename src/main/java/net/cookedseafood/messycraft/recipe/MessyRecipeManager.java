@@ -99,13 +99,21 @@ public class MessyRecipeManager {
 
     public static MessyRecipeManager fromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup wrapperLookup) {
         return new MessyRecipeManager(
-            nbtCompound.entrySet()
-            .stream()
-            .map(entry -> Map.entry(
-                Identifier.of(entry.getKey()),
-                MessyRecipe.fromNbt((NbtCompound)entry.getValue(), wrapperLookup)
-            ))
-            .collect(Collectors.toMap(Entry::getKey, Entry::getValue))
+            nbtCompound.entrySet().stream()
+                .map(entry -> Map.entry(
+                    Identifier.of(entry.getKey()),
+                    MessyRecipe.fromNbt((NbtCompound)entry.getValue(), wrapperLookup)
+                ))
+                .collect(Collectors.toMap(Entry::getKey, Entry::getValue))
         );
+    }
+
+    public NbtCompound toNbt(RegistryWrapper.WrapperLookup wrapperLookup) {
+        return this.entrySet().stream()
+            .map(entry -> Map.entry(
+                entry.getKey().toString(),
+                entry.getValue().toNbt(wrapperLookup)
+            ))
+        .<NbtCompound>collect(NbtCompound::new, (nbtCompound, entry) -> nbtCompound.put(entry.getKey(), entry.getValue()), (left, right) -> left.putAll(right));
     }
 }
