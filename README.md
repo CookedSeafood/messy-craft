@@ -33,11 +33,3 @@ Here is a template recipe file.
     }
 }
 ```
-
-## Moding
-
-```java
-MessyCraft.craft(ServerPlayerEntity player, Identifier recipeId, int times);
-```
-
-Where `recipeId` is `MY_NAMESPACE:MY_RECIPE`. (introduced in recipe section)
