@@ -2,7 +2,7 @@
 
 Messy Craft is a nbt crafting library runs on server-side.
 
-## Commands
+## Command
 
 - `/craft <recipe> [<times>]` Craft recipes.
 - `/c <recipe> [<times>]` Alias of `/craft`.
@@ -28,7 +28,7 @@ Here is a template recipe file.
         "count": 1,
         "id": "minecraft:milk_bucket",
         "components": {
-            "minecraft:rarity": "rare"
+            "minecraft:item_name": "Milky Water"
         }
     }
 }
