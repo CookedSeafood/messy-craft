@@ -6,8 +6,8 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import net.cookedseafood.messycraft.MessyCraft;
-import net.cookedseafood.messycraft.suggestions.MessyRecipeSuggestionProvider;
+import net.cookedseafood.messycraft.recipe.MessyRecipe;
+import net.cookedseafood.messycraft.suggestion.MessyRecipeSuggestionProvider;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -39,7 +39,8 @@ public class CraftCommand {
     }
 
     public static int craft(ServerCommandSource source, String item, int count) throws CommandSyntaxException {
-        boolean isSuccessful = MessyCraft.craft(source.getPlayerOrThrow(), Identifier.of(item.replace('.', ':')), count);
+        boolean isSuccessful = MessyRecipe.craft(Identifier.of(item.replace('.', ':')), count, source.getPlayerOrThrow());
+
         if (isSuccessful) {
             return 1;
         } else {

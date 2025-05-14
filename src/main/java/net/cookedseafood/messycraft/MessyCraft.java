@@ -8,25 +8,20 @@ import com.mojang.serialization.JsonOps;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.cookedseafood.messycraft.api.CraftMessyRecipeCallback;
+import net.cookedseafood.genericregistry.registry.Registries;
 import net.cookedseafood.messycraft.command.CraftCommand;
 import net.cookedseafood.messycraft.command.MessyCraftCommand;
-import net.cookedseafood.messycraft.recipe.MessyIngredient;
-import net.cookedseafood.messycraft.recipe.MessyItemStack;
 import net.cookedseafood.messycraft.recipe.MessyRecipe;
-import net.cookedseafood.messycraft.recipe.MessyRecipeManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,13 +35,12 @@ public class MessyCraft implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static final byte VERSION_MAJOR = 0;
-    public static final byte VERSION_MINOR = 1;
-    public static final byte VERSION_PATCH = 15;
+    public static final byte VERSION_MINOR = 2;
+    public static final byte VERSION_PATCH = 0;
 
     public static final String MOD_NAMESPACE = "messy_craft";
     public static final Identifier RECIPE_LOADER_ID = Identifier.of(MOD_NAMESPACE, "recipe_loader");
     public static final Pattern PATH_PATTERN = Pattern.compile("^(.+\\/)*(.+)\\.(.+)$");
-    public static final MessyRecipeManager RECIPES = new MessyRecipeManager();
 
     @Override
     public void onInitialize() {
@@ -79,7 +73,7 @@ public class MessyCraft implements ModInitializer {
     public static void reloadMessyRecipe(ResourceManager resourceManager, RegistryWrapper.WrapperLookup wrapperLookup) {
         LOGGER.info("[Messy-Craft] Reloading recipes!");
 
-        RECIPES.clear();
+        Registries.remove(MessyRecipe.class);
         resourceManager.findResources("messy_recipe", path -> path.getPath().endsWith(".json"))
             .entrySet()
             .forEach((resourceEntry) -> {
@@ -105,54 +99,7 @@ public class MessyCraft implements ModInitializer {
                 String recipeName = resourcePathMatcher.group(2); // Get file name
                 Identifier recipeId = Identifier.of(resourceNamespace, recipeName);
 
-                RECIPES.put(recipeId, recipe);
+                Registries.register(recipeId, recipe);
             });
-    }
-
-    /**
-     * Craft the recipe of the id at the times, if there is enough ingredients.
-     * 
-     * <p>This modifies player's inventory if successfully crafted.</p>
-     * 
-     * @param player
-     * @param recipeId
-     * @param times
-     * @return true if successfully crafted.
-     */
-    public static boolean craft(ServerPlayerEntity player, Identifier recipeId, int times) {
-        MessyRecipe recipe = RECIPES.get(recipeId);
-        if (recipe == null) {
-            return false;
-        }
-
-        return craft(player, recipe.deepCopy(), times);
-    }
-
-    /**
-     * Craft the recipe at the times, if there is enough ingredients.
-     * 
-     * <p>This modifies player's inventory if successfully crafted.</p>
-     * 
-     * @param player
-     * @param recipe
-     * @param times
-     * @return true if successfully crafted.
-     */
-    public static boolean craft(ServerPlayerEntity player, MessyRecipe recipe, int times) {
-        PlayerInventory inventory = player.getInventory();
-        MessyIngredient ingredients = recipe.getIngredients();
-        ingredients.forEach(itemStack -> itemStack.times(times));
-        if (!ingredients.isIn(inventory)) {
-            return false;
-        }
-
-        CraftMessyRecipeCallback.EVENT.invoker().interact(player, recipe, times);
-
-        ingredients.removeFrom(inventory);
-
-        MessyItemStack result = recipe.getResult();
-        result.times(times);
-        result.insertTo(inventory);
-        return true;
     }
 }

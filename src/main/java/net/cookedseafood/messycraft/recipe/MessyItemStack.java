@@ -1,7 +1,5 @@
 package net.cookedseafood.messycraft.recipe;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentType;
@@ -12,6 +10,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 public class MessyItemStack {
     private ItemStack itemStack;

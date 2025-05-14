@@ -31,6 +31,10 @@ public class MessyIngredient {
         this.forEach(itemStack -> itemStack.removeFrom(inventory));
     }
 
+    public void times(int times) {
+        this.ingredients.forEach(itemStack -> itemStack.times(times));
+    }
+
     public List<MessyItemStack> getIngredients() {
         return this.ingredients;
     }
