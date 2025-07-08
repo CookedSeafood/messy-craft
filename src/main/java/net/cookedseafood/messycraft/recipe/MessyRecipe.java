@@ -21,9 +21,9 @@ public class MessyRecipe {
     }
 
     /**
-     * Craft the recipe of the id at the times, if there is enough ingredients.
+     * Craft the recipe of the id at the times if there is enough ingredients.
      * 
-     * <p>This modifies player's inventory if successfully crafted.</p>
+     * <p>Player's inventory will be modified if successfully crafted.</p>
      * 
      * @param recipeId
      * @param times
@@ -40,9 +40,9 @@ public class MessyRecipe {
     }
 
     /**
-     * Craft the recipe at the times, if there is enough ingredients.
+     * Craft the recipe at the times if there is enough ingredients.
      * 
-     * <p>This modifies player's inventory if successfully crafted.</p>
+     * <p>Player's inventory will be modified if successfully crafted.</p>
      * 
      * @param times
      * @param player
@@ -92,8 +92,8 @@ public class MessyRecipe {
 
     public static MessyRecipe fromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup wrapperLookup) {
         return new MessyRecipe(
-            MessyIngredient.fromNbt(nbtCompound.getList("ingredients", NbtElement.COMPOUND_TYPE), wrapperLookup),
-            MessyItemStack.fromNbt(nbtCompound.getCompound("result"), wrapperLookup)
+            MessyIngredient.fromNbt(nbtCompound.getListOrEmpty("ingredients"), wrapperLookup),
+            MessyItemStack.fromNbt(nbtCompound.getCompoundOrEmpty("result"), wrapperLookup)
         );
     }
 

@@ -35,7 +35,7 @@ public class MessyCraft implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static final byte VERSION_MAJOR = 0;
-    public static final byte VERSION_MINOR = 2;
+    public static final byte VERSION_MINOR = 3;
     public static final byte VERSION_PATCH = 0;
 
     public static final String MOD_NAMESPACE = "messy_craft";
@@ -66,8 +66,8 @@ public class MessyCraft implements ModInitializer {
             };
         });
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> CraftCommand.register(dispatcher, registryAccess));
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> MessyCraftCommand.register(dispatcher, registryAccess));
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> CraftCommand.register(dispatcher, registryAccess));
     }
 
     public static void reloadMessyRecipe(ResourceManager resourceManager, RegistryWrapper.WrapperLookup wrapperLookup) {

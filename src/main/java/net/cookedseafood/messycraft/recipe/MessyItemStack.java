@@ -100,7 +100,7 @@ public class MessyItemStack {
         return this.itemStack.getComponentChanges();
     }
 
-    public <T> T set(ComponentType<? super T> type, @Nullable T value) {
+    public <T> T set(ComponentType<T> type, @Nullable T value) {
         return this.itemStack.set(type, value);
     }
 

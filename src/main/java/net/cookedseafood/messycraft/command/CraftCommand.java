@@ -16,7 +16,7 @@ import net.minecraft.util.Identifier;
 
 public class CraftCommand {
     private static final SimpleCommandExceptionType INGREDIENT_INSUFFICIENT_EXCEPTION =
-        new SimpleCommandExceptionType(Text.literal("You don't have enough items to craft these."));
+        new SimpleCommandExceptionType(Text.literal("Missing materials."));
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
         LiteralCommandNode<ServerCommandSource> craft = dispatcher.register(

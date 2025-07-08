@@ -11,14 +11,14 @@ public interface CraftMessyRecipeCallback {
         (listeners) -> (player, recipeId, times) -> {
             for (CraftMessyRecipeCallback listener : listeners) {
                 ActionResult result = listener.interact(player, recipeId, times);
- 
+
                 if(result != ActionResult.PASS) {
                     return result;
                 }
             }
- 
+
         return ActionResult.PASS;
     });
- 
+
     ActionResult interact(PlayerEntity player, MessyRecipe recipeId, int times);
 }
