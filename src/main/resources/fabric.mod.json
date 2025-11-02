@@ -28,13 +28,13 @@
         "messy-craft.mixins.json"
     ],
     "depends": {
-        "fabricloader": ">=0.16.14",
-        "minecraft": "~1.21.5",
+        "fabricloader": ">=0.17.3",
+        "minecraft": "~1.21.6",
         "java": ">=21",
         "fabric-api": "*",
-        "generic-registry": ">=1.0.0",
-        "candy-wrapper": ">=0.7.4",
-        "general-custom-data": ">=0.1.1"
+        "generic-registry": ">=1.0.1",
+        "candy-wrapper": ">=0.8.2",
+        "general-custom-data": ">=0.2.0"
     },
     "suggests": {
         "another-mod": "*"

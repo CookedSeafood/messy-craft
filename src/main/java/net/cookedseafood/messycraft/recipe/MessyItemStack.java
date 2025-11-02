@@ -8,6 +8,7 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -118,10 +119,10 @@ public class MessyItemStack {
     }
 
     public static MessyItemStack fromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup wrapperLookup) {
-        return new MessyItemStack(ItemStack.fromNbt(wrapperLookup, nbtCompound).get());
+        return new MessyItemStack(ItemStack.CODEC.parse(NbtOps.INSTANCE, nbtCompound).getOrThrow());
     }
 
     public NbtElement toNbt(RegistryWrapper.WrapperLookup wrapperLookup) {
-        return this.itemStack.toNbt(wrapperLookup);
+        return ItemStack.CODEC.encode(this.itemStack, NbtOps.INSTANCE, new NbtCompound()).getOrThrow();
     }
 }

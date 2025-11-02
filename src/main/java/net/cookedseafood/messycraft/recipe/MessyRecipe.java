@@ -1,15 +1,31 @@
 package net.cookedseafood.messycraft.recipe;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.JsonOps;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+
+import org.apache.commons.lang3.mutable.MutableInt;
+
 import net.cookedseafood.genericregistry.registry.Registries;
 import net.cookedseafood.messycraft.api.CraftMessyRecipeCallback;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+
+import static net.cookedseafood.messycraft.MessyCraft.LOGGER;
+import static net.cookedseafood.messycraft.MessyCraft.PATH_PATTERN;
 
 public class MessyRecipe {
     private MessyIngredient ingredients;
@@ -108,5 +124,44 @@ public class MessyRecipe {
                 )
             )
         );
+    }
+
+    public static void reload(ResourceManager resourceManager, RegistryWrapper.WrapperLookup wrapperLookup) {
+        Registries.remove(MessyRecipe.class);
+        load(resourceManager, wrapperLookup);
+    }
+
+    public static void load(ResourceManager resourceManager, RegistryWrapper.WrapperLookup wrapperLookup) {
+        MutableInt loadedCount = new MutableInt(0);
+        resourceManager.findResources("messy_recipe", path -> path.getPath().endsWith(".json"))
+            .forEach((resourceId, resource) -> {
+                JsonObject recipeJsonObject;
+                try {
+                    BufferedReader reader = resource.getReader();
+                    recipeJsonObject = new Gson().fromJson(reader, JsonObject.class);
+                    reader.close();
+                } catch (JsonSyntaxException | JsonIOException | IOException e) {
+                    LOGGER.error("[Messy-Craft] Failed to load recipe from " + resourceId.toString(), e);
+                    return;
+                }
+
+                if (recipeJsonObject == null) {
+                    LOGGER.error("[Messy-Craft] Failed to load recipe from " + resourceId.toString() + ": Json is at EOF.");
+                    return;
+                }
+
+                Matcher matcher = PATH_PATTERN.matcher(resourceId.getPath());
+                if (!matcher.matches()) {
+                    LOGGER.error("[Messy-Craft] Failed to load recipe from " + resourceId.toString() + ": Invalid path.");
+                    return;
+                }
+
+                Identifier recipeId = Identifier.of(resourceId.getNamespace(), matcher.group(2));
+                NbtCompound recipeNbtCompound = (NbtCompound)JsonOps.INSTANCE.convertMap(NbtOps.INSTANCE, recipeJsonObject);
+                MessyRecipe recipe = MessyRecipe.fromNbt(recipeNbtCompound, wrapperLookup);
+                Registries.register(recipeId, recipe);
+                loadedCount.increment();
+            });
+        LOGGER.info("[Messy-Craft] Loaded " + loadedCount.intValue() + " recipes.");
     }
 }
